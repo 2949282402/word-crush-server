@@ -1,10 +1,10 @@
-package com.example.hjlblog.controller;
+package com.example.wordCrushServer.controller;
 
-import com.example.hjlblog.dto.ApiResponse;
-import com.example.hjlblog.dto.LoginRequest;
-import com.example.hjlblog.entiy.User;
-import com.example.hjlblog.service.UserService;
-import com.example.hjlblog.util.tokenUtil;
+import com.example.wordCrushServer.dto.ApiResponse;
+import com.example.wordCrushServer.dto.LoginRequest;
+import com.example.wordCrushServer.entiy.User;
+import com.example.wordCrushServer.service.UserService;
+import com.example.wordCrushServer.util.tokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,8 +1,8 @@
-package com.example.hjlblog.service.impl;
+package com.example.wordCrushServer.service.impl;
 
-import com.example.hjlblog.entiy.User;
-import com.example.hjlblog.mapper.UserMapper;
-import com.example.hjlblog.service.UserService;
+import com.example.wordCrushServer.entiy.User;
+import com.example.wordCrushServer.mapper.UserMapper;
+import com.example.wordCrushServer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.example.hjlblog.service;
+package com.example.wordCrushServer.service;
 
-import com.example.hjlblog.entiy.User;
+import com.example.wordCrushServer.entiy.User;
 
 public interface UserService {
     User getUserById(int id);

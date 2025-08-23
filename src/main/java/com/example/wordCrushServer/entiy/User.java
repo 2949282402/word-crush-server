@@ -1,4 +1,4 @@
-package com.example.hjlblog.entiy;
+package com.example.wordCrushServer.entiy;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

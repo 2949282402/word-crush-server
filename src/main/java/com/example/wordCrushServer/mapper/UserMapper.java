@@ -1,6 +1,6 @@
-package com.example.hjlblog.mapper;
+package com.example.wordCrushServer.mapper;
 
-import com.example.hjlblog.entiy.User;
+import com.example.wordCrushServer.entiy.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;

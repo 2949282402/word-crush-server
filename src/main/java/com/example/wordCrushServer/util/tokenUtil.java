@@ -1,9 +1,7 @@
-package com.example.hjlblog.util;
+package com.example.wordCrushServer.util;
 
-import com.example.hjlblog.dto.ApiResponse;
-import com.example.hjlblog.entiy.User;
-import com.example.hjlblog.service.UserService;
-import com.example.hjlblog.service.impl.UserServiceImpl;
+import com.example.wordCrushServer.dto.ApiResponse;
+import com.example.wordCrushServer.entiy.User;
 import io.jsonwebtoken.*;
 
 import java.util.Date;
