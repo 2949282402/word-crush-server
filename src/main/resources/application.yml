@@ -56,3 +56,9 @@ app:
   token:
     prefix: ${REDIS_TOKEN_PREFIX:wordcrush:auth:token:}
     user-prefix: ${REDIS_USER_TOKEN_PREFIX:wordcrush:auth:user:}
+  ranking:
+    prefix: ${REDIS_RANKING_PREFIX:wordcrush:ranking:}
+    ttl: ${REDIS_RANKING_TTL:5m}
+  avatar:
+    cache-prefix: ${REDIS_AVATAR_PREFIX:wordcrush:avatar:}
+    cache-ttl: ${REDIS_AVATAR_TTL:30d}

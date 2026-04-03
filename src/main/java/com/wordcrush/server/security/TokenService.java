@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordcrush.server.common.exception.BusinessException;
 import com.wordcrush.server.config.JwtProperties;
-import com.wordcrush.server.domain.entity.UserAccount;
+import com.wordcrush.server.module.user.account.entity.UserAccount;
 import io.jsonwebtoken.Claims;
 import java.time.Duration;
 import java.time.LocalDateTime;
