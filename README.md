@@ -1,8 +1,8 @@
 # WordCrush Server
 
-WordCrush Server 是 `word-crush-app` 的后端服务，基于 Spring Boot 3 构建，提供账号、头像、排行榜、游戏记录等接口，并使用 MySQL、Redis、Flyway、JWT 组织完整的工程化能力。
+WordCrush Server is the backend for the WordCrush app. It uses Spring Boot 3, MySQL, Redis, Flyway, JWT, and Docker.
 
-## 技术栈
+## Stack
 
 - Java 17
 - Spring Boot 3
@@ -16,132 +16,47 @@ WordCrush Server 是 `word-crush-app` 的后端服务，基于 Spring Boot 3 构
 - Docker / Docker Compose
 - Maven
 
-## 当前认证模型
+## Profiles
 
-- 服务端使用 `JWT + Redis Session` 进行认证。
-- 登录成功后会签发 token，并把会话写入 Redis。
-- 同一账号采用单设备登录：新设备登录会撤销该用户历史 token。
-- 改密后会立即撤销该用户全部 token。
-- 受保护接口要求携带 token；旧客户端兼容以下三种传法：
-  - `Authorization: Bearer <token>`
-  - 请求头 `token: <token>`
-  - 部分兼容接口仍可通过 `token` query 参数传入
+This project uses explicit Spring profiles:
 
-## 鉴权白名单
+- `dev` is the default profile
+- `prod` is used for server deployment
 
-以下路径无需登录：
+The active profile is controlled by `SPRING_PROFILES_ACTIVE`.
 
-- `POST /api/user/login`
-- `POST /api/user/register`
-- `GET /api/user/checkToken`
-- `POST /api/getTopNRecord`
-- `GET /api/user/avatar/{username}`
-- `/swagger-ui/**`
-- `/api-docs/**`
-- `/actuator/**`
+## Local Development
 
-除以上白名单外，其余 `/api/**` 接口都需要通过 token 验证。
-
-另外，以下接口除了要求 token 有效，还会校验“请求里的用户名必须与当前 token 对应用户一致”，防止跨账号操作：
-
-- `POST /api/user/changePassword`
-- `POST /api/user/avatar`
-- `POST /api/addGameRecord`
-- `POST /api/deleteGameRecord`
-- `POST /api/getAllGameRecord`
-
-## 主要能力
-
-- 用户登录、注册、改密、token 校验
-- 用户头像上传与读取
-- 游戏记录新增、删除、查询
-- 排行榜查询
-- Redis 会话管理与 token 失效控制
-- Flyway 数据库版本管理
-
-## 接口约定
-
-账号接口返回：
-
-- `code / msg / data`
-
-旧版游戏记录与排行榜接口返回：
-
-- `status / message`
-
-这部分是为了兼容 Android 客户端的既有协议。
-
-## 目录结构
-
-```text
-src/main/java/com/wordcrush/server
-├── common
-├── config
-├── module
-├── security
-└── WordCrushServerApplication.java
-```
-
-## 核心接口
-
-账号接口：
-
-- `POST /api/user/login`
-- `GET /api/user/checkToken`
-- `POST /api/user/register`
-- `POST /api/user/changePassword`
-- `POST /api/user/avatar`
-- `GET /api/user/avatar/{username}`
-
-游戏与排行榜接口：
-
-- `POST /api/getTopNRecord`
-- `POST /api/addGameRecord`
-- `POST /api/deleteGameRecord`
-- `POST /api/getAllGameRecord`
-
-## 数据设计
-
-- [docs/database-design.md](./docs/database-design.md)
-- [src/main/resources/db/migration/V1__init_schema.sql](./src/main/resources/db/migration/V1__init_schema.sql)
-
-Redis 中与认证相关的 key 约定：
-
-- `wordcrush:auth:token:{token}`：token 对应的会话数据
-- `wordcrush:auth:user:{userId}`：用户当前持有的 token 集合
-
-## 本地运行
-
-准备好 MySQL 和 Redis 后执行：
+Run the app with the default `dev` profile:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-默认地址：
+In `dev`, Swagger and Actuator details stay enabled, and Spring Boot Docker Compose integration is on.
 
-- App: `http://localhost:8080`
-- Swagger: `http://localhost:8080/swagger-ui/index.html`
+## Production Deployment
 
-启动后会自动确保存在默认管理员账号：
-
-- 用户名：`admin`
-- 密码：`123456`
-
-## Docker Compose
+Run the Docker stack with the production profile:
 
 ```bash
 docker compose up --build -d
 ```
 
-会拉起：
+The compose file sets `SPRING_PROFILES_ACTIVE=prod`, so the app starts with production settings automatically.
 
-- `word-crush-server`
-- `word-crush-mysql`
-- `word-crush-redis`
+Production behavior:
 
-## 关键环境变量
+- Swagger is disabled
+- Spring Boot Docker Compose integration is disabled
+- Actuator only exposes `health`
+- JVM memory is capped
+- MySQL and Redis container memory are capped
 
+## Key Environment Variables
+
+- `SPRING_PROFILES_ACTIVE`
+- `SERVER_PORT`
 - `MYSQL_URL`
 - `MYSQL_USERNAME`
 - `MYSQL_PASSWORD`
@@ -154,8 +69,18 @@ docker compose up --build -d
 - `BOOTSTRAP_ADMIN_USERNAME`
 - `BOOTSTRAP_ADMIN_PASSWORD`
 
-## 联调建议
+## API Notes
 
-- Android 端登录后应保存服务端返回的 `data.token`
-- 后续受保护请求统一带 token
-- 如果接口返回 `401`，客户端应清理本地会话并回到登录页
+- `POST /api/user/login`
+- `POST /api/user/register`
+- `GET /api/user/checkToken`
+- `POST /api/getTopNRecord`
+- `GET /api/user/avatar/{username}`
+- `/swagger-ui/**`
+- `/api-docs/**`
+- `/actuator/**`
+
+## Useful Links
+
+- [docs/database-design.md](./docs/database-design.md)
+- [src/main/resources/db/migration/V1__init_schema.sql](./src/main/resources/db/migration/V1__init_schema.sql)

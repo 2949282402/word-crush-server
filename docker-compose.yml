@@ -14,8 +14,12 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --default-time-zone=+08:00
+      - --innodb-buffer-pool-size=256M
+      - --max-connections=50
+      - --performance-schema=OFF
     volumes:
       - mysql-data:/var/lib/mysql
+    mem_limit: 768m
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot123456"]
       interval: 10s
@@ -27,9 +31,17 @@ services:
     container_name: word-crush-redis
     ports:
       - "6379:6379"
-    command: ["redis-server", "--appendonly", "yes"]
+    command:
+      - redis-server
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - 64mb
+      - --maxmemory-policy
+      - allkeys-lru
     volumes:
       - redis-data:/data
+    mem_limit: 128m
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -47,6 +59,7 @@ services:
       redis:
         condition: service_healthy
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SERVER_PORT: 8080
       MYSQL_URL: jdbc:mysql://mysql:3306/word_crush?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
       MYSQL_USERNAME: wordcrush
@@ -57,8 +70,15 @@ services:
       JWT_EXPIRATION_HOURS: 168
       BOOTSTRAP_ADMIN_USERNAME: admin
       BOOTSTRAP_ADMIN_PASSWORD: 123456
+      JAVA_TOOL_OPTIONS: >-
+        -XX:MaxRAMPercentage=40
+        -XX:InitialRAMPercentage=15
+        -XX:MaxMetaspaceSize=128m
+        -XX:ReservedCodeCacheSize=64m
+        -XX:+UseSerialGC
     ports:
       - "8080:8080"
+    mem_limit: 512m
     restart: unless-stopped
 
 volumes:
