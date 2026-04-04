@@ -52,6 +52,14 @@ Production behavior:
 - Actuator only exposes `health`
 - JVM memory is capped
 - MySQL and Redis container memory are capped
+- `resume.html` is served from a bind-mounted directory, so you can edit it on the host without rebuilding the image
+- `/images/avatar.jpg` is also served from a bind-mounted directory for the same reason
+
+Mounted files used by the app:
+
+- `src/main/resources/templates/resume.html` -> `/app/external-resume/resume.html`
+- `src/main/resources/static/images/avatar.jpg` -> `/app/external-static/images/avatar.jpg`
+- `/` redirects to `/resume.html`
 
 ## Key Environment Variables
 

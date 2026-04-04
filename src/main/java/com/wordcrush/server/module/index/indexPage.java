@@ -8,6 +8,6 @@ public class indexPage {
 
     @GetMapping("/")
     public String index() {
-        return "resume";
+        return "redirect:/resume.html";
     }
 }

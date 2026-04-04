@@ -78,6 +78,9 @@ services:
         -XX:+UseSerialGC
     ports:
       - "8080:8080"
+    volumes:
+      - ./src/main/resources/templates:/app/external-resume:ro
+      - ./src/main/resources/static:/app/external-static:ro
     mem_limit: 512m
     restart: unless-stopped
 
